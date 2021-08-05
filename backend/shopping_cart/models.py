@@ -2,13 +2,12 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from accounts.models import Profile
-from products.models import Product
+from Webshop.models import Profile, Product, OrderItem
 
 
 class CartOrderItem(models.Model):
     product = models.OneToOneField(
-        Product, on_delete=models.SET_NULL, null=True)
+    Product, on_delete=models.SET_NULL, null=True)
     is_ordered = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now=True)
     date_ordered = models.DateTimeField(null=True)

@@ -1,8 +1,7 @@
 from django.contrib import admin
 
-from .models import OrderItem, Order, Item, Transaction
+from shopping_cart.models import CartOrderItem, CartOrder, Transaction
 
-admin.site.register(OrderItem)
-admin.site.register(Order)
-admin.site.register(Item)
+admin.site.register(CartOrderItem)
+admin.site.register(CartOrder)
 admin.site.register(Transaction)

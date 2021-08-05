@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'stripe',
 
     'Webshop',
     'shopping_cart'
@@ -65,7 +67,9 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'Templates'),
+                 os.path.join(BASE_DIR, 'Webshop', 'Templates', 'Webshop')
+                ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,9 +143,27 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000'
 ]
 
+# Django AllAuth Settings
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 SITE_ID = 1
+
+
+# Stripe and Braintree Settings
+
+if DEBUG:
+    # test keys
+    STRIPE_PUBLISHABLE_KEY = ''
+    STRIPE_SECRET_KEY = ''
+    BT_ENVIRONMENT='sandbox'
+    BT_MERCHANT_ID='YOUR BT_MERCHANT_ID'
+    BT_PUBLIC_KEY='YOUR BT_PUBLIC_KEY'
+    BT_PRIVATE_KEY='YOUR BT_PRIVATE_KEY'
+else:
+    # live keys
+    STRIPE_PUBLISHABLE_KEY = 'YOUR STRIPE LIVE PUB KEY'
+    STRIPE_SECRET_KEY = 'YOUR STRIPE LIVE SECRET KEY'
