@@ -15,10 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework import routers
+from Webshop import views
+
+router = routers.DefaultRouter()
+router.register(r'categories', views.ListCategory, 'category')
+router.register(r'products', views.ListProduct, 'product')
+router.register(r'orderitems', views.ListOrderItem, 'orderitem')
+router.register(r'cartorders', views.ListCartOrder, 'cartorder')
+router.register(r'profiles', views.ListProfile, 'profile')
+
+
 
 urlpatterns = [
+    path('', include('Webshop.urls')),
     path('admin/', admin.site.urls),
-    path('api/v1/', include('Webshop.urls')),
-    path('accounts/', include('allauth.urls')),
+    path('api/v1', include(router.urls)),
 ]
-

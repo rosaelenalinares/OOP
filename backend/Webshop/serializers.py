@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Category, Product, OrderItem, Order
+from .models import Category, Product, OrderItem, CartOrder, Profile
+from . import models
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -12,7 +13,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
 
 
-class ItemSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
             'id',
@@ -34,24 +35,37 @@ class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
             'id',
-            'user',
-            'ordered',
-            'item',
+            'is_ordered',
+            'product',
+            'date_added',
+            'date_ordered',
             'quantity',
         )
 
         model = OrderItem
 
 
-class OrderSerializer(serializers.ModelSerializer):
+class CartOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+            'id',
+            'owner',
+            'ref_code',
+            'items',
+            'start_date',
+            'date_ordered',
+            'is_ordered',
+        )
+
+        model = CartOrder
+
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
             'id',
             'user',
-            'items',
-            'start_date',
-            'ordered_date',
-            'ordered',
+            'product',
+            'stripe_id',
         )
 
-        model = Order
+        model = Profile

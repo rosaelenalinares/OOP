@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'stripe',
 
     'Webshop',
-    'shopping_cart'
 ]
 
 MIDDLEWARE = [
@@ -150,6 +149,21 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+# #django-allauth registraion settings
+# ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =1
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+  
+# # 1 day
+# ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400 
+  
+# #or any other page
+ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/' 
+  
+# # redirects to profile page if not configured.
+LOGIN_REDIRECT_URL = '/accounts/email/'
+
 SITE_ID = 1
 
 
@@ -157,8 +171,8 @@ SITE_ID = 1
 
 if DEBUG:
     # test keys
-    STRIPE_PUBLISHABLE_KEY = ''
-    STRIPE_SECRET_KEY = ''
+    STRIPE_PUBLISHABLE_KEY = 'pk_test_51JL7JQKClhXtg1n9sO17PNXrPdq7bQ8rYJlMan9Do1H1hkqolMnYknORfvU12mxgrzASvMIbJDwctILIyANseeVf007kAaj78t'
+    STRIPE_SECRET_KEY = 'sk_test_51JL7JQKClhXtg1n9VCkxw7JKlysY9g1XtsxYlAA6JxpUAF1CRaDpvkJ8ONzvM2MRvLNbrW404BMZZgy7AmNPv9g600MLpWp8T0'
     BT_ENVIRONMENT='sandbox'
     BT_MERCHANT_ID='YOUR BT_MERCHANT_ID'
     BT_PUBLIC_KEY='YOUR BT_PUBLIC_KEY'

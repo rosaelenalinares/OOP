@@ -1,13 +1,12 @@
 from django.db import models
 from django.conf import settings
-
+from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
-
 import stripe
-
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your models here.
+
 
 class Category(models.Model):
     title = models.CharField(max_length=200)
@@ -30,42 +29,20 @@ class Product(models.Model):
     quantity = models.IntegerField(default=1)
     size = models.CharField(max_length=5, default='S')
 
-    class meta:
-        ordering = ['date_created']
-
     def __str__(self):
         return self.title
 
 
-class OrderItem(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    ordered = models.BooleanField(default=False)
-    item = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.quantity} of {self.item.title}"
-
-
-
-class Order(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    items = models.ManyToManyField(OrderItem)
-    start_date = models.DateTimeField(auto_now_add=True)
-    ordered_date = models.DateTimeField()
-    ordered = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.user.username
-
-
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    product = models.ManyToManyField(Product, blank=True)
+    product = models.ManyToManyField(Product)
     stripe_id = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.user.username
+
+    def get_profile_products(self):
+        return self.product.all()
 
 
 def post_save_profile_create(sender, instance, created, *args, **kwargs):
@@ -78,6 +55,39 @@ def post_save_profile_create(sender, instance, created, *args, **kwargs):
 
 
 post_save.connect(post_save_profile_create, sender=settings.AUTH_USER_MODEL)
+
+
+
+class OrderItem(models.Model):
+    is_ordered = models.BooleanField(default=False)
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, null=True)
+    date_added = models.DateTimeField(auto_now=True)
+    date_ordered = models.DateTimeField(auto_now=True, null=True)
+    quantity = models.IntegerField(default=1)
+
+    def __str__(self):
+        return str(self.product.title)
+
+
+
+
+class CartOrder(models.Model):
+    owner = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
+    ref_code = models.CharField(max_length=15, default=True)
+    items = models.ManyToManyField(OrderItem)
+    start_date = models.DateTimeField(auto_now_add=True)
+    date_ordered = models.DateTimeField(auto_now=True)
+    is_ordered = models.BooleanField(default=False)
+
+    def get_cart_items(self):
+        return self.items.all()
+
+    def get_cart_total(self):
+        return sum([item.product.price for item in self.items.all()])
+
+    def __str__(self):
+        return '{0} - {1}'.format(self.owner, self.ref_code)
+
 
 
 
