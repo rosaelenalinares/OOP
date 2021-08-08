@@ -1,12 +1,12 @@
 from django.urls import path
 from Webshop import views
-from .views import (
+# from .views import (
     # my_profile,
-    product_list,
-    add_to_cart,
-    delete_from_cart,
-    order_details,
-)
+    # product_list,
+    # add_to_cart,
+    # delete_from_cart,
+    # order_details,
+# )
 
 
 app_name = 'Webshop'
