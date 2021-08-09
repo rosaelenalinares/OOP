@@ -30,5 +30,5 @@ router.register(r'profiles', views.ListProfile, 'profile')
 urlpatterns = [
     path('', include('Webshop.urls')),
     path('admin/', admin.site.urls),
-    path('api/v1', include(router.urls)),
+    path('api/', include(router.urls)),
 ]
