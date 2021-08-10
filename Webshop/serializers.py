@@ -64,6 +64,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'user',
+            'firstname',
+            'lastname',
             'product',
             'stripe_id',
         )

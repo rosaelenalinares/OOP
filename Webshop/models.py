@@ -35,6 +35,8 @@ class Product(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    firstname = models.CharField(max_length=50, default=True)
+    lastname = models.CharField(max_length=50, default=True)
     product = models.ManyToManyField(Product)
     stripe_id = models.CharField(max_length=200, null=True, blank=True)
 

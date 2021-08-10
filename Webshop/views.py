@@ -40,10 +40,6 @@ class ListProfile(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
-class ListProfile(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-
 
 @login_required
 def my_profile(request):
@@ -52,10 +48,11 @@ def my_profile(request):
     my_orders = CartOrder.objects.filter(is_ordered=True, owner=my_user_profile)
     context = {
         'my_orders': my_orders,
-        'user': user
+        'user': user,
+        'my_user_profile': my_user_profile
     }
 
-    # return render(request, 'profile.html', context)
+    # return render(context)
 
 
 
@@ -73,7 +70,7 @@ def product_list(request):
         'object_list': object_list,
         'current_order_products': current_order_products
     }
-    # return render(request, 'product_list.html', context)
+    # return render(context)
 
 
 
@@ -131,6 +128,7 @@ def generate_order_id():
 def order_details(request, **kwargs):
     existing_order = get_user_pending_order(request)
     context = {
-        'order': existing_order
+        'order': existing_order,
+        'user_profile': existing_order
     }
     # return render(request, 'order_summary.html', context)
