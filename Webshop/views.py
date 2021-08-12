@@ -51,8 +51,7 @@ def my_profile(request):
         'user': user,
         'my_user_profile': my_user_profile
     }
-
-    # return render(context)
+    return HttpResponse(request) #new
 
 
 
@@ -70,7 +69,7 @@ def product_list(request):
         'object_list': object_list,
         'current_order_products': current_order_products
     }
-    # return render(context)
+    return HttpResponse(request) #new
 
 
 
@@ -84,29 +83,29 @@ def get_user_pending_order(request):
     return 0
 
 
+
 @login_required()
 def add_to_cart(request, **kwargs):
-    # get the user profile
-    user_profile = get_object_or_404(Profile, user=request.user)
-    # filter products by id
-    product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
-    # check if the user already owns this product
-    if product in request.user.profile.product.all():
-        messages.info(request, 'You already own this product')
-        # return redirect(reverse('product_list'))
-    # create orderItem of the selected product
-    order_item, status = OrderItem.objects.get_or_create(product=product)
-    # create order associated with the user
-    user_order, status = CartOrder.objects.get_or_create(owner=user_profile, is_ordered=False)
-    user_order.items.add(order_item)
-    if status:
-        # generate a reference code
-        user_order.ref_code = generate_order_id()
-        user_order.save()
+        # get the user profile
+        user_profile = get_object_or_404(Profile, user=request.user)
+        # filter products by id
+        product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
+        # check if the user already owns this product
+        if product in request.user.profile.product.all():
+            messages.info(request, 'You already own this product')
+        # create orderItem of the selected product
+        order_item, status = OrderItem.objects.get_or_create(product=product)
+        # create order associated with the user
+        user_order, status = CartOrder.objects.get_or_create(owner=user_profile, is_ordered=False)
+        user_order.items.add(order_item)
+        if status:
+            # generate a reference code
+            user_order.ref_code = generate_order_id()
+            user_order.save()
 
-    # show confirmation message and redirect back to the same page
-    messages.info(request, "Item added to cart")
-    # return redirect(reverse('product_list'))
+        # show confirmation message and redirect back to the same page
+        messages.info(request, "Item added to cart")
+        return HttpResponse(request, kwargs) #new
 
 
 @login_required()
@@ -115,7 +114,7 @@ def delete_from_cart(request, item_id):
     if item_to_delete.exists():
         item_to_delete[0].delete()
         messages.info(request, "Item has been deleted")
-    # return redirect(reverse('order_summary'))
+    return HttpResponse(request, item_id)  #nuevo
 
 
 def generate_order_id():
@@ -131,4 +130,20 @@ def order_details(request, **kwargs):
         'order': existing_order,
         'user_profile': existing_order
     }
-    # return render(request, 'order_summary.html', context)
+    return HttpResponse(request, kwargs)
+
+
+
+def search(request):
+    try:
+        search = request.GET.get('search')
+    except:
+        search = None
+    if search:
+        product = Product.objects.filter(title__icontains=search)
+        context = {
+            'product': product,
+        }
+    else:
+        context = {}
+    return HttpResponse(request) 

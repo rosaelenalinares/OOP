@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from Webshop import views
+from django.conf import settings
+
 
 router = routers.DefaultRouter()
 router.register(r'categories', views.ListCategory, 'category')
@@ -31,5 +33,12 @@ urlpatterns = [
     path('', include('Webshop.urls')),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('accounts/', include('allauth.urls')),
+    # path('accounts/', include('allauth.urls')),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls'))
 ]
+
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

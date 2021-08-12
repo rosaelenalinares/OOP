@@ -1,11 +1,18 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 import stripe
+from django.contrib.auth.models import AbstractUser
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your models here.
+
+
+class CustomUser(AbstractUser):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    phone_number = models.CharField(max_length=30)
 
 
 class Category(models.Model):
@@ -23,7 +30,7 @@ class Product(models.Model):
     price = models.FloatField()
     description = models.TextField()
     stock = models.IntegerField()
-    imageurl = models.ImageField()
+    imageurl = models.ImageField(upload_to="images/")
     status = models.BooleanField(default=True)
     date_created = models.DateField(default=True)
     quantity = models.IntegerField(default=1)
@@ -35,8 +42,6 @@ class Product(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    firstname = models.CharField(max_length=50, default=True)
-    lastname = models.CharField(max_length=50, default=True)
     product = models.ManyToManyField(Product)
     stripe_id = models.CharField(max_length=200, null=True, blank=True)
 

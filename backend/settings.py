@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',            'webshop-api-jo
 INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,8 +49,14 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'stripe',
     'whitenoise.runserver_nostatic',
+
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
     'Webshop',
 ]
+
+AUTH_USER_MODEL = 'Webshop.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -160,7 +167,7 @@ AUTHENTICATION_BACKENDS = [
 
 # #django-allauth registraion settings
 # ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =1
-# ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = True
 # ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
   
@@ -168,10 +175,10 @@ AUTHENTICATION_BACKENDS = [
 # ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400 
   
 # #or any other page
-ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/' 
+# ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/' 
   
 # # redirects to profile page if not configured.
-LOGIN_REDIRECT_URL = '/accounts/email/'
+# LOGIN_REDIRECT_URL = '/accounts/email/'
 
 SITE_ID = 1
 
@@ -193,3 +200,33 @@ else:
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
+
+
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+# ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
+# ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = False
+# ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_UNIQUE_EMAIL = False
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'Webshop.serializers.CustomRegisterSerializer',
+}
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'Webshop.serializers.CustomRegisterSerializer',
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    ),
+}
+
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'webshop-auth' # The cookie key name can be the one you want
