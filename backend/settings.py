@@ -228,5 +228,7 @@ REST_FRAMEWORK = {
     ),
 }
 
+
 REST_USE_JWT = True
-JWT_AUTH_COOKIE = 'webshop-auth' # The cookie key name can be the one you want
+JWT_AUTH_COOKIE = 'webshop-auth'
+JWT_AUTH_REFRESH_COOKIE = 'webshop-refresh-token'
