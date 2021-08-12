@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 dj-rest-auth = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
