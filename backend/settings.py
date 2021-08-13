@@ -209,7 +209,8 @@ ACCOUNT_USERNAME_REQUIRED = True
 # ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = False
 # ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_UNIQUE_EMAIL = False
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_SESSION_REMEMBER = True
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
@@ -222,13 +223,21 @@ REST_AUTH_SERIALIZERS = {
 }
 
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-    ),
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+#     ),
+# }
+
+
+# REST_USE_JWT = True
+# JWT_AUTH_COOKIE = 'webshop-auth'
+# JWT_AUTH_REFRESH_COOKIE = 'webshop-refresh-token'
+
+# Rest Framework config. Add all of this.
+REST_FRAMEWORK = {    
+    'DATETIME_FORMAT': "%m/%d/%Y %I:%M%P",    
+        'DEFAULT_AUTHENTICATION_CLASSES': [        
+            'rest_framework.authentication.TokenAuthentication',    
+        ],
 }
-
-
-REST_USE_JWT = True
-JWT_AUTH_COOKIE = 'webshop-auth'
-JWT_AUTH_REFRESH_COOKIE = 'webshop-refresh-token'

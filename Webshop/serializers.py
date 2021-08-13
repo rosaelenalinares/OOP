@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Product, OrderItem, CartOrder, Profile
+from .models import Category, Product, OrderItem, CartOrder, Profile, CustomUser
 from . import models
 from django.db import transaction
 from rest_framework import serializers
@@ -73,6 +73,19 @@ class ProfileSerializer(serializers.ModelSerializer):
         )
 
         model = Profile
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = (
+        'id',
+        'username',
+        'email',
+        'first_name',
+        'last_name',
+        'phone_number'
+    )
+
+    model = CustomUser
 
 
 class CustomRegisterSerializer(RegisterSerializer):

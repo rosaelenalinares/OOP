@@ -26,6 +26,7 @@ router.register(r'products', views.ListProduct, 'product')
 router.register(r'orderitems', views.ListOrderItem, 'orderitem')
 router.register(r'cartorders', views.ListCartOrder, 'cartorder')
 router.register(r'profiles', views.ListProfile, 'profile')
+router.register(r'users', views.ListUser, 'user')
 
 
 
@@ -33,7 +34,6 @@ urlpatterns = [
     path('', include('Webshop.urls')),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    # path('accounts/', include('allauth.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
 ]

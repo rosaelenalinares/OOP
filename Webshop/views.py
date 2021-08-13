@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import Category, Product, OrderItem, CartOrder, Profile
-from .serializers import CategorySerializer, ProductSerializer, OrderItemSerializer, CartOrderSerializer, ProfileSerializer
+from .models import Category, CustomUser, Product, OrderItem, CartOrder, Profile
+from .serializers import CategorySerializer, ProductSerializer, OrderItemSerializer, CartOrderSerializer, ProfileSerializer, CustomUserSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from django.http import HttpResponse, request
@@ -39,6 +39,10 @@ class ListCartOrder(viewsets.ModelViewSet):
 class ListProfile(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+class ListUser(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
 
 
 @login_required
@@ -86,26 +90,26 @@ def get_user_pending_order(request):
 
 @login_required()
 def add_to_cart(request, **kwargs):
-        # get the user profile
-        user_profile = get_object_or_404(Profile, user=request.user)
-        # filter products by id
-        product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
-        # check if the user already owns this product
-        if product in request.user.profile.product.all():
-            messages.info(request, 'You already own this product')
-        # create orderItem of the selected product
-        order_item, status = OrderItem.objects.get_or_create(product=product)
-        # create order associated with the user
-        user_order, status = CartOrder.objects.get_or_create(owner=user_profile, is_ordered=False)
-        user_order.items.add(order_item)
-        if status:
-            # generate a reference code
-            user_order.ref_code = generate_order_id()
-            user_order.save()
+    # get the user profile
+    user_profile = get_object_or_404(Profile, user=request.user)
+    # filter products by id
+    product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
+    # check if the user already owns this product
+    if product in request.user.profile.product.all():
+        messages.info(request, 'You already own this product')
+    # create orderItem of the selected product
+    order_item, status = OrderItem.objects.get_or_create(product=product)
+    # create order associated with the user
+    user_order, status = CartOrder.objects.get_or_create(owner=user_profile, is_ordered=False)
+    user_order.items.add(order_item)
+    if status:
+        # generate a reference code
+        user_order.ref_code = generate_order_id()
+        user_order.save()
 
-        # show confirmation message and redirect back to the same page
-        messages.info(request, "Item added to cart")
-        return HttpResponse(request, kwargs) #new
+    # show confirmation message and redirect back to the same page
+    messages.info(request, "Item added to cart")
+    return HttpResponse(request, kwargs) #new
 
 
 @login_required()
