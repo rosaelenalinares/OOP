@@ -83,9 +83,9 @@ class CustomUserSerializer(serializers.ModelSerializer):
         'first_name',
         'last_name',
         'phone_number'
-    )
+        )
 
-    model = CustomUser
+        model = CustomUser
 
 
 class CustomRegisterSerializer(RegisterSerializer):
