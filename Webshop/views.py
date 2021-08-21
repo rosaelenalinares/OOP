@@ -1,9 +1,10 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .models import Category, CustomUser, Product, OrderItem, CartOrder, Profile
-from .serializers import CategorySerializer, ProductSerializer, OrderItemSerializer, CartOrderSerializer, ProfileSerializer, CustomUserSerializer
+from .serializers import CategorySerializer, ProductSerializer, OrderItemSerializer, CartOrderSerializer, CustomUserSerializer, ProfileSerializer
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from django.http import HttpResponse, request
@@ -14,8 +15,6 @@ import string
 from datetime import date
 import datetime
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
-
 
 
 # Create your views here.
@@ -36,44 +35,14 @@ class ListCartOrder(viewsets.ModelViewSet):
     queryset = CartOrder.objects.all()
     serializer_class = CartOrderSerializer
 
-class ListProfile(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-
 class ListUser(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
+class ListProfile(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
-@login_required
-def my_profile(request):
-    user = request.user
-    my_user_profile = Profile.objects.filter(user).first()
-    my_orders = CartOrder.objects.filter(is_ordered=True, owner=my_user_profile)
-    context = {
-        'my_orders': my_orders,
-        'user': user,
-        'my_user_profile': my_user_profile
-    }
-    return HttpResponse(request) #new
-
-
-
-@login_required
-def product_list(request):
-    object_list = Product.objects.all()
-    filtered_orders = CartOrder.objects.filter(owner=request.user.profile, is_ordered=False)
-    current_order_products = []
-    if filtered_orders.exists():
-    	user_order = filtered_orders[0]
-    	user_order_items = user_order.items.all()
-    	current_order_products = [product.product for product in user_order_items]
-
-    context = {
-        'object_list': object_list,
-        'current_order_products': current_order_products
-    }
-    return HttpResponse(request) #new
 
 
 
@@ -94,23 +63,19 @@ def add_to_cart(request, **kwargs):
     user_profile = get_object_or_404(Profile, user=request.user)
     # filter products by id
     product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
-    # check if the user already owns this product
-    if product in request.user.profile.product.all():
-        messages.info(request, 'You already own this product')
     # create orderItem of the selected product
     order_item, status = OrderItem.objects.get_or_create(product=product)
     # create order associated with the user
     user_order, status = CartOrder.objects.get_or_create(owner=user_profile, is_ordered=False)
-    user_order.items.add(order_item)
+    user_order.order_items.add(order_item)
     if status:
         # generate a reference code
         user_order.ref_code = generate_order_id()
         user_order.save()
-
-    # show confirmation message and redirect back to the same page
     messages.info(request, "Item added to cart")
     return HttpResponse(request, kwargs) #new
 
+        
 
 @login_required()
 def delete_from_cart(request, item_id):
@@ -121,33 +86,36 @@ def delete_from_cart(request, item_id):
     return HttpResponse(request, item_id)  #nuevo
 
 
+
+
 def generate_order_id():
     date_str = date.today().strftime('%Y%m%d')[
         2:] + str(datetime.datetime.now().second)
     rand_str = "".join([random.choice(string.digits) for count in range(3)])
     return date_str + rand_str
+
     
-@login_required()
-def order_details(request, **kwargs):
-    existing_order = get_user_pending_order(request)
-    context = {
-        'order': existing_order,
-        'user_profile': existing_order
-    }
-    return HttpResponse(request, kwargs)
+# @login_required()
+# def order_details(request, **kwargs):
+#     existing_order = get_user_pending_order(request)
+#     context = {
+#         'order': existing_order,
+#         'user_profile': existing_order
+#     }
+#     return HttpResponse(request, kwargs)
 
 
 
-def search(request):
-    try:
-        search = request.GET.get('search')
-    except:
-        search = None
-    if search:
-        product = Product.objects.filter(title__icontains=search)
-        context = {
-            'product': product,
-        }
-    else:
-        context = {}
-    return HttpResponse(request) 
+# def search(request):
+#     try:
+#         search = request.GET.get('search')
+#     except:
+#         search = None
+#     if search:
+#         product = Product.objects.filter(title__icontains=search)
+#         context = {
+#             'product': product,
+#         }
+#     else:
+#         context = {}
+#     return HttpResponse(request) 

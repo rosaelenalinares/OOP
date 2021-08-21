@@ -25,8 +25,8 @@ router.register(r'categories', views.ListCategory, 'category')
 router.register(r'products', views.ListProduct, 'product')
 router.register(r'orderitems', views.ListOrderItem, 'orderitem')
 router.register(r'cartorders', views.ListCartOrder, 'cartorder')
-router.register(r'profiles', views.ListProfile, 'profile')
 router.register(r'users', views.ListUser, 'user')
+router.register(r'profiles', views.ListProfile, 'profile')
 
 
 

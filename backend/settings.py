@@ -165,26 +165,11 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# #django-allauth registraion settings
-# ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =1
-ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-# ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
-  
-# # 1 day
-# ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400 
-  
-# #or any other page
-# ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/' 
-  
-# # redirects to profile page if not configured.
-# LOGIN_REDIRECT_URL = '/accounts/email/'
 
 SITE_ID = 1
 
 
 # Stripe and Braintree Settings
-
 if DEBUG:
     # test keys
     STRIPE_PUBLISHABLE_KEY = 'pk_test_51JL7JQKClhXtg1n9sO17PNXrPdq7bQ8rYJlMan9Do1H1hkqolMnYknORfvU12mxgrzASvMIbJDwctILIyANseeVf007kAaj78t'
@@ -222,18 +207,6 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'Webshop.serializers.CustomRegisterSerializer',
 }
 
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-#     ),
-# }
-
-
-# REST_USE_JWT = True
-# JWT_AUTH_COOKIE = 'webshop-auth'
-# JWT_AUTH_REFRESH_COOKIE = 'webshop-refresh-token'
-
 # Rest Framework config. Add all of this.
 REST_FRAMEWORK = {    
     'DATETIME_FORMAT': "%m/%d/%Y %I:%M%P",    
@@ -241,3 +214,13 @@ REST_FRAMEWORK = {
             'rest_framework.authentication.TokenAuthentication',    
         ],
 }
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+#     ),
+# }
+# REST_USE_JWT = True
+# JWT_AUTH_COOKIE = 'webshop-auth'
+# JWT_AUTH_REFRESH_COOKIE = 'webshop-refresh-token'
+
