@@ -38,7 +38,7 @@ class Product(models.Model):
     price = models.FloatField()
     description = models.TextField()
     stock = models.IntegerField()
-    imageurl = models.ImageField(upload_to="images/")
+    imageurl = models.URLField()
     status = models.BooleanField(default=True)
     date_created = models.DateField(default=True)
     quantity = models.IntegerField(default=1)
