@@ -7,15 +7,15 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 # Create your models here.
 
 CATEGORY_CHOICES = (
-    ('OW', 'Outer wear'),
-    ('AW', 'Active wear'),
-    ('SW', 'Swimwear'),
-    ('CW', 'Casual Wear'),
-    ('B', 'Bottoms'),
-    ('SB', 'Shirt and blouses'),
-    ('SW', 'Sport Wear'),
-    ('SL', 'Sleep wear'),
-    ('S', 'Shoes'),
+    ('Outer wear', 'Outer wear'),
+    ('Active wear', 'Active wear'),
+    ('Swimwear', 'Swimwear'),
+    ('Casual Wear', 'Casual Wear'),
+    ('Bottoms', 'Bottoms'),
+    ('Shirt and blouses', 'Shirt and blouses'),
+    ('Sport Wear', 'Sport Wear'),
+    ('Sleep wear', 'Sleep wear'),
+    ('Shoes', 'Shoes'),
 )
 
 class CustomUser(AbstractUser):
@@ -44,7 +44,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=200)
-    category = models.CharField(choices=CATEGORY_CHOICES, max_length=2, null=True)
+    category = models.CharField(choices=CATEGORY_CHOICES, max_length=100, null=True)
     price = models.FloatField()
     description = models.TextField()
     stock = models.IntegerField()
