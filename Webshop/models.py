@@ -68,7 +68,7 @@ class CartOrder(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     order_items = models.ManyToManyField(OrderItem)
     date_ordered = models.DateTimeField(auto_now=True)
-    is_ordered = models.BooleanField(default=False, null=True)
+    is_ordered = models.BooleanField(default=False)
 
     def get_cart_items(self):
         return self.order_items.all()
