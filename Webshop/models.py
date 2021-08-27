@@ -54,7 +54,7 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now=True)
     date_ordered = models.DateTimeField(auto_now=True, null=True)
-    quantity = models.IntegerField(default=1)
+    quantity = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.quantity} of {self.product.title}"
