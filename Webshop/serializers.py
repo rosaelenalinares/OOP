@@ -38,7 +38,6 @@ class ProductSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
-            'id',
             'product',
             'date_added',
             'date_ordered',
