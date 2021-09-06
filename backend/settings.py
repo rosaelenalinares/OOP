@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-yvv$a@xkud0(f9%in(iwiu$wc2hl(%z#co!gld(5sf(xce8yr(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',            'webshop-api-johnsons.herokuapp.com']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', 'webshop-api-johnsons.herokuapp.com']
 
 
 # Application definition
@@ -169,31 +169,14 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 
 
-# Stripe and Braintree Settings
-if DEBUG:
-    # test keys
-    STRIPE_PUBLISHABLE_KEY = 'pk_test_51JL7JQKClhXtg1n9sO17PNXrPdq7bQ8rYJlMan9Do1H1hkqolMnYknORfvU12mxgrzASvMIbJDwctILIyANseeVf007kAaj78t'
-    STRIPE_SECRET_KEY = 'sk_test_51JL7JQKClhXtg1n9VCkxw7JKlysY9g1XtsxYlAA6JxpUAF1CRaDpvkJ8ONzvM2MRvLNbrW404BMZZgy7AmNPv9g600MLpWp8T0'
-    BT_ENVIRONMENT='sandbox'
-    BT_MERCHANT_ID='YOUR BT_MERCHANT_ID'
-    BT_PUBLIC_KEY='YOUR BT_PUBLIC_KEY'
-    BT_PRIVATE_KEY='YOUR BT_PRIVATE_KEY'
-else:
-    # live keys
-    STRIPE_PUBLISHABLE_KEY = 'YOUR STRIPE LIVE PUB KEY'
-    STRIPE_SECRET_KEY = 'YOUR STRIPE LIVE SECRET KEY'
-
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 
 
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
-# ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USERNAME_REQUIRED = True
-# ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = False
-# ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_SESSION_REMEMBER = True
 
